@@ -1,0 +1,175 @@
+<html>
+	<head>
+		<title>Eric's Picross Game</title>
+		<style>
+			table, th, td {
+				border: 3px solid black;
+				border-collapse: collapse;
+
+				.input{
+					background: white;
+				}
+			}
+
+			 .center {
+			   margin-left: auto;
+			   margin-right: auto;
+			}
+    	</style>
+	</head>
+<body oncontextmenu="return false;">
+	<p align='center'><input id="start" type="button" value="New random game" /></p>
+	<p align='center'><input id="hint" type="button" value="Hint" /></p>
+	<p align='center'><input id="fstart" type="button" value="Load game" style="display: none"/></p>
+	<p align='center'><input type="file" id="my_file" style="display: none"/></p>
+	<p align='center' id="status">Press "New game" to start</p>
+
+	<table id="game" style="width:700px; visibility: hidden" class = "center">
+		  <tr>
+			<td></td>
+			<th scope="col" id="column1"></th>
+			<th scope="col" id="column2"></th>
+			<th scope="col" id="column3"></th>
+			<th scope="col" id="column4"></th>
+			<th scope="col" id="column5"></th>
+			<th scope="col" id="column6"></th>
+			<th scope="col" id="column7"></th>
+			<th scope="col" id="column8"></th>
+			<th scope="col" id="column9"></th>
+			<th scope="col" id="column10"></th>
+		  </tr>
+		  <tr id="r1">
+			<th scope="row" id="row1"></th>
+			<td id="row1column1"><input id="r1c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column2"><input id="r1c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column3"><input id="r1c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column4"><input id="r1c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column5"><input id="r1c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column6"><input id="r1c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column7"><input id="r1c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column8"><input id="r1c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column9"><input id="r1c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row1column10"><input id="r1c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  <tr id="r2">
+			<th scope="row" id="row2"></th>
+			<td id="row2column1"><input id="r2c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column2"><input id="r2c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column3"><input id="r2c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column4"><input id="r2c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column5"><input id="r2c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column6"><input id="r2c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column7"><input id="r2c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column8"><input id="r2c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column9"><input id="r2c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row2column10"><input id="r2c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  <tr id="r3">
+		  	<th scope="row" id="row3"></th>
+			<td id="row3column1"><input id="r3c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column2"><input id="r3c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column3"><input id="r3c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column4"><input id="r3c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column5"><input id="r3c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column6"><input id="r3c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column7"><input id="r3c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column8"><input id="r3c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column9"><input id="r3c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row3column10"><input id="r3c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  		  <tr id="r4">
+		  			<th scope="row" id="row4"></th>
+			<td id="row4column1"><input id="r4c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column2"><input id="r4c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column3"><input id="r4c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column4"><input id="r4c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column5"><input id="r4c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column6"><input id="r4c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column7"><input id="r4c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column8"><input id="r4c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column9"><input id="r4c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row4column10"><input id="r4c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  <tr id="r5">
+		  	<th scope="row" id="row5"></th>
+			<td id="row5column1"><input id="r5c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column2"><input id="r5c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column3"><input id="r5c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column4"><input id="r5c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column5"><input id="r5c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column6"><input id="r5c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column7"><input id="r5c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column8"><input id="r5c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column9"><input id="r5c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row5column10"><input id="r5c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  		  <tr id="r6">
+		  			<th scope="row" id="row6"></th>
+			<td id="row6column1"><input id="r6c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column2"><input id="r6c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column3"><input id="r6c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column4"><input id="r6c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column5"><input id="r6c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column6"><input id="r6c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column7"><input id="r6c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column8"><input id="r6c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column9"><input id="r6c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row6column10"><input id="r6c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  		  <tr id="r7">
+		  			<th scope="row" id="row7"></th>
+			<td id="row7column1"><input id="r7c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column2"><input id="r7c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column3"><input id="r7c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column4"><input id="r7c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column5"><input id="r7c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column6"><input id="r7c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column7"><input id="r7c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column8"><input id="r7c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column9"><input id="r7c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row7column10"><input id="r7c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  		  <tr id="r8">
+		  			<th scope="row" id="row8"></th>
+			<td id="row8column1"><input id="r8c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column2"><input id="r8c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column3"><input id="r8c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column4"><input id="r8c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column5"><input id="r8c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column6"><input id="r8c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column7"><input id="r8c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column8"><input id="r8c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column9"><input id="r8c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row8column10"><input id="r8c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  		  <tr id="r9">
+		  			<th scope="row" id="row9"></th>
+			<td id="row9column1"><input id="r9c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column2"><input id="r9c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column3"><input id="r9c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column4"><input id="r9c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column5"><input id="r9c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column6"><input id="r9c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column7"><input id="r9c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column8"><input id="r9c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column9"><input id="r9c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row9column10"><input id="r9c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+		  		  <tr id="r10">
+		  			<th scope="row" id="row10"></th>
+			<td id="row10column1"><input id="r10c1" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column2"><input id="r10c2" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column3"><input id="r10c3" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column4"><input id="r10c4" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column5"><input id="r10c5" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column6"><input id="r10c6" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column7"><input id="r10c7" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column8"><input id="r10c8" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column9"><input id="r10c9" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+			<td id="row10column10"><input id="r10c10" type="button" style="background: white; width: 60px; visibility: hidden; font-size:40px" value="" onmousedown="setValue(this.id, event)" /></td>
+		  </tr>
+	</table>
+
+	<script src="./picross.js"></script>
+</body>
+</html>
