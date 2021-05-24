@@ -7,6 +7,7 @@ var playerBoard=[puzzleSize];
 
 var rowLabels=[puzzleSize];
 var columnLabels=[puzzleSize];
+var helpBtn = document.getElementById("tut");
 var startBtn = document.getElementById("start");
 var hintBtn = document.getElementById("hint");
 var loadBtn = document.getElementById("fstart");
@@ -379,4 +380,9 @@ hintBtn.onclick = function startGame()
 		updateGameBoard();
 		checkForWin();
 	}
+}
+
+helpBtn.onclick = function displayInstructions()
+{
+	alert("GOAL\nTo use the hints on the rows and columns to fill in the puzzle\n\nCONTROLS\nLeft click: Fill in spot\nRight click: Mark spot as incorrect\nHint: Correctly fills in one correct spot, limited use");
 }
