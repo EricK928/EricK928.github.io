@@ -79,7 +79,7 @@ function checkForWin()
 	if(win==1 && winCheckFlag==1)
 	{
 		winStreak++;
-		totalWins++;
+		//totalWins++;
 		document.getElementById("status").innerHTML="YOU WIN!\n Puzzles completed: "+winStreak;
 		gameInProgress=0;
 		winCheckFlag=0;
