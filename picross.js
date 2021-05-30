@@ -472,7 +472,7 @@ startBtn.onclick = function startGame()
 	createRandomPuzzle(difficulty);
 	fillHeaders();
 	document.getElementById("game").style.visibility="visible";
-	//document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
+	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
 	//document.getElementById("status").innerHTML=hintAmt+" hints left!";
 	console.log(gameBoard);
 	fillBoard(playerBoard);
