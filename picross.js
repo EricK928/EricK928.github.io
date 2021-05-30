@@ -1,4 +1,7 @@
 //const fs = require('fs');
+//var totalWins=document.cookies;
+var winStreak=0;
+var winCheckFlag=1;
 
 var hintAmt=0;
 var puzzleSize=10;
@@ -9,6 +12,7 @@ var rowLabels=[puzzleSize];
 var columnLabels=[puzzleSize];
 var helpBtn = document.getElementById("tut");
 var startBtn = document.getElementById("start");
+var startSetBtn = document.getElementById("startSet");
 var hintBtn = document.getElementById("hint");
 var loadBtn = document.getElementById("fstart");
 var gameInProgress=0;
@@ -72,15 +76,19 @@ function checkForWin()
 		}
 	}
 
-	if(win==1)
+	if(win==1 && winCheckFlag==1)
 	{
-		document.getElementById("status").innerHTML="YOU WIN!";
+		winStreak++;
+		totalWins++;
+		document.getElementById("status").innerHTML="YOU WIN!\n Puzzles completed: "+winStreak;
 		gameInProgress=0;
+		winCheckFlag=0;
 	}
 	else
 	{
 	}
 }
+
 function setPuzzleSize()
 {
 	do
@@ -90,17 +98,29 @@ function setPuzzleSize()
 	while(puzzleSize>10);
 }
 
-function createRandomPuzzle()
+function createRandomPuzzle(difficulty)
 {
+	var fillCount=0;
+
 	for(var i=0; i<puzzleSize; i++)
 	{
 		for(var j=0; j<puzzleSize; j++)
 		{
-			var rng=Math.floor(Math.random()*10);
+			var rng=Math.floor(Math.random()*10)+1;//Increased by 1
 
-			if(rng%2==0)
+			/*if(rng%2==0)
 			{
 				gameBoard[i][j]="O";
+			}
+			else
+			{
+				gameBoard[i][j]="X";
+			}*/
+
+			if(rng<=difficulty)
+			{
+				gameBoard[i][j]="O";
+				fillCount++;
 			}
 			else
 			{
@@ -108,6 +128,43 @@ function createRandomPuzzle()
 			}
 		}
 	}
+
+	/*if(document.getElementById("puzzleDifficulty").value<=3 && puzzleSize==10 && (fillCount<42  || fillCount>47))
+	{
+		console.log("# of pieces: "+fillCount);
+		createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
+	}*/
+	var lowRange=0.0;
+	var highRange=0.0;
+
+	switch(difficulty)
+	{
+		case 10: lowRange=.91;highRange=.97;break;
+		case 9: lowRange=.84;highRange=.89;break;
+		case 8: lowRange=.76;highRange=.80;break;
+		case 7: lowRange=.68;highRange=.76;break;
+		case 6: lowRange=.56;highRange=.61;break;
+		case 5: lowRange=.48;highRange=.52;break;
+		case 4: lowRange=.48;highRange=.52;break;
+		case 3: lowRange=.42;highRange=.47;break;
+		case 2: lowRange=.34;highRange=.40;break;
+		case 1: lowRange=.29;highRange=.34;break;
+
+
+		case '6': lowRange=.56;highRange=.61;break;
+		case '5': lowRange=.48;highRange=.52;break;
+		case '4': lowRange=.48;highRange=.52;break;
+		case '3': lowRange=.42;highRange=.47;break;
+		default: lowRange=.5;highRange=.5;break;
+	}
+
+
+	if(fillCount<(puzzleSize*puzzleSize*lowRange)  || fillCount>(puzzleSize*puzzleSize*highRange))
+	{
+		console.log("# of pieces: "+fillCount);
+		createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
+	}
+
 
 	setBoardVisibility();
 }
@@ -272,52 +329,170 @@ function updateColumns()
 
 function setValue(toBeUpdated, event)
 {
-	if(event.button==0 && gameInProgress==1)
+	var cheatButton=false;
+	var pos=toBeUpdated.split("c");
+	pos[0]=pos[0].replace("r"," ");
+
+	pos[0]-=1;
+	pos[1]-=1;
+
+	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent))//Used for mobile
 	{
 		if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
 		{
 			document.getElementById(toBeUpdated).value="O";
 			document.getElementById(toBeUpdated).style.background="black";
 		}
-		else
-		{
-			document.getElementById(toBeUpdated).value="";
-			document.getElementById(toBeUpdated).style.background="white";
-		}
-	}
-	else if(event.button==2 && gameInProgress==1)
-	{
-		if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
+		else if(document.getElementById(toBeUpdated).value=="O" && gameInProgress==1)
 		{
 			document.getElementById(toBeUpdated).value="X";
 			document.getElementById(toBeUpdated).style.background="white";
 		}
-		else
+		else if(document.getElementById(toBeUpdated).value=="X" && gameInProgress==1)
 		{
 			document.getElementById(toBeUpdated).value="";
 			document.getElementById(toBeUpdated).style.background="white";
 		}
 	}
+	else
+	{
+		if(event.button==0 && gameInProgress==1)
+		{
+			if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
+			{
+				document.getElementById(toBeUpdated).value="O";
+				document.getElementById(toBeUpdated).style.background="black";
+			}
+			else
+			{
+				document.getElementById(toBeUpdated).value="";
+				document.getElementById(toBeUpdated).style.background="white";
+			}
+		}
+		else if(event.button==1 && gameInProgress==1 && cheatButton)
+		{
+			if(hintAmt>0)
+			{
+				if(gameBoard[pos[0]][pos[1]]=="O" && gameInProgress==1)
+				{
+					document.getElementById(toBeUpdated).value="O";
+					document.getElementById(toBeUpdated).style.background="black";
+				}
+				else
+				{
+					document.getElementById(toBeUpdated).value="X";
+					document.getElementById(toBeUpdated).style.background="white";
+				}
+				hintAmt--;
+				hintBtn.value=hintAmt+" hints left!";
+				document.getElementById("status").innerHTML=hintAmt+" hints left!";
+			}
+		}
+		else if(event.button==2 && gameInProgress==1)
+		{
+			if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
+			{
+				document.getElementById(toBeUpdated).value="X";
+				document.getElementById(toBeUpdated).style.background="white";
+			}
+			else
+			{
+				document.getElementById(toBeUpdated).value="";
+				document.getElementById(toBeUpdated).style.background="white";
+			}
+		}
+	}
+
 
 	updateGameBoard();
 	checkForWin();
 }
 
+function giveHints(difficulty)
+{
+	console.log("Difficulty hint: "+difficulty);
+	hintAmt=0;
+	hintBtn.disabled=false;
+	//hintAmt=Math.floor((puzzleSize-5)+(6-document.getElementById("puzzleDifficulty").value))+1;
+
+	switch(difficulty)
+	{
+		case 10: hintAmt+=0.0;break;
+		case 9: hintAmt+=0.5;break;
+		case 8: hintAmt+=0.75;break;
+		case 7: hintAmt+=1.0;break;
+		case 6: hintAmt+=1.5;break;
+		case 5: hintAmt+=2.25;break;
+		case 4: hintAmt+=2.5;break;
+		case 3: hintAmt+=3.5;break;
+		case 2: hintAmt+=4.5;break;
+		case 1: hintAmt+=6.5;break;
+
+
+		case '6': hintAmt+=1.5;break;
+		case '5': hintAmt+=2.25;break;
+		case '4': hintAmt+=2.5;break;
+		case '3': hintAmt+=3.5;break;
+		default: hintAmt+=999;break;
+	}
+
+	switch(puzzleSize)
+	{
+		case 5: hintAmt+=1.25;break;
+		case 6: hintAmt+=2.25;break;
+		case 7: hintAmt+=2.5;break;
+		case 8: hintAmt+=2.75;break;
+		case 9: hintAmt+=3.0;break;
+		case 10: hintAmt+=3.5;break;
+		case '5': hintAmt+=1.25;break;
+		case '6': hintAmt+=2.25;break;
+		case '7': hintAmt+=2.5;break;
+		case '8': hintAmt+=2.75;break;
+		case '9': hintAmt+=3.0;break;
+		case '10': hintAmt+=3.5;break;
+		default: hintAmt+=999;break;
+	}
+
+	hintAmt=Math.floor(hintAmt);
+	hintBtn.value=hintAmt+" hints left!";
+}
 
 startBtn.onclick = function startGame()
 {
 	puzzleSize=10;
-	hintBtn.disabled=false;
+	winCheckFlag=1;
 
-	setPuzzleSize();//Uncomment for different sizes
-	hintAmt=Math.floor(puzzleSize/3)+2;
-	hintBtn.value=hintAmt+" hints left!";
+	var difficulty=Math.floor(Math.random()*10)+1;
+
+	setPuzzleSize();
+
+	giveHints(difficulty);
 	fillBoard(gameBoard);
 
-	createRandomPuzzle();
+	createRandomPuzzle(difficulty);
 	fillHeaders();
 	document.getElementById("game").style.visibility="visible";
-	document.getElementById("status").innerHTML="Puzzle: Random";
+	//document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
+	document.getElementById("status").innerHTML=hintAmt+" hints left!";
+	console.log(gameBoard);
+	fillBoard(playerBoard);
+	clearHTMLBoard();
+	gameInProgress=1;
+}
+
+startSetBtn.onclick = function startGame()
+{
+	puzzleSize=document.getElementById("puzzleSize").value;
+	winCheckFlag=1;
+
+	giveHints(document.getElementById("puzzleDifficulty").value);
+
+	fillBoard(gameBoard);
+
+	createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
+	fillHeaders();
+	document.getElementById("game").style.visibility="visible";
+	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
 	console.log(gameBoard);
 	fillBoard(playerBoard);
 	clearHTMLBoard();
@@ -384,5 +559,6 @@ hintBtn.onclick = function startGame()
 
 helpBtn.onclick = function displayInstructions()
 {
+	//console.log(totalWins);
 	alert("GOAL\nTo use the hints on the rows and columns to fill in the puzzle\n\nCONTROLS\nLeft click: Fill in spot\nRight click: Mark spot as incorrect\nHint: Correctly fills in one correct spot, limited use");
 }

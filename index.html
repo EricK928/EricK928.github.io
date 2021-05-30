@@ -19,13 +19,40 @@
 	</head>
 <body oncontextmenu="return false;">
 	<p align='center'><input id="tut" type="button" value="How to play" /></p>
+	<p align='center'>
+
+	<label for="difficulty">Choose a difficulty:</label>
+
+	<select name="difficulty" id="puzzleDifficulty">
+	  <!-- <option value="7">Very Easy</option> -->
+	  <option value="6">Easy</option>
+	  <option value="4">Medium</option>
+	  <option value="3">Hard</option>
+	  <!-- <option value="3">Very Hard</option> -->
+	</select>
+
+	<label for="size">Select a size:</label>
+
+	<select name="size" id="puzzleSize">
+	  <option value="5">5x5</option>
+	  <option value="6">6x6</option>
+	  <option value="7">7x7</option>
+	  <option value="8">8x8</option>
+	  <option value="9">9x9</option>
+	  <option value="10">10x10</option>
+	</select>
+
+	<input id="startSet" type="button" value="New game" />
+
+	</p>
+
 	<p align='center'><input id="start" type="button" value="New random game" /></p>
 	<p align='center'><input id="hint" type="button" value="Hint" /></p>
 	<p align='center'><input id="fstart" type="button" value="Load game" style="display: none"/></p>
 	<p align='center'><input type="file" id="my_file" style="display: none"/></p>
 	<p align='center' id="status">Press "New game" to start</p>
 
-	<table id="game" style="width:700px; visibility: hidden" class = "center">
+	<table id="game" style="width:700px; visibility: hidden" class = "center" value="test">
 		  <tr>
 			<td></td>
 			<th scope="col" id="column1"></th>
