@@ -1,5 +1,3 @@
-//const fs = require('fs');
-//var totalWins=document.cookies;
 var winStreak=0;
 var winCheckFlag=1;
 
@@ -17,27 +15,107 @@ var hintBtn = document.getElementById("hint");
 var loadBtn = document.getElementById("fstart");
 var gameInProgress=0;
 
+var piecePlace = new sound("./resources/piecePlace.mp3");
+var gameStartSound = new sound("./resources/gameStart.wav");
+var gameWinSound = new sound("./resources/gameWin.wav");
+
 var puzzleName="";//NEEDS TO BE IMPLEMENTED
+
+function tableCreate(gameSize)
+{
+	var body = document.getElementsByTagName("body")[0];
+
+	var tbl = document.createElement("table");
+	tbl.id=("game");
+	tbl.style.width  = "100px";
+	tbl.align = 'center';
+
+	var creationCheck=document.getElementById("game");
+	console.log(creationCheck);
+
+	if(creationCheck!=null)
+	{
+		creationCheck.remove();
+	}
+
+	var tblBody = document.createElement("tbody");
+
+	//Starting work on header
+	var rowa = document.createElement("tr");
+	var de = document.createElement("td");
+
+	rowa.appendChild(de);
+
+
+	for(var k=0; k<gameSize; k++)
+	{
+		var header = document.createElement("th");
+		header.scope="col";
+		header.id="column"+(k+1);
+		header.style="word-wrap: break-word";
+    	rowa.appendChild(header);
+	}
+
+	tblBody.appendChild(rowa);
+
+	//Work on actual gameboard
+	for (var j=0; j<gameSize; j++)
+	{
+    	var row = document.createElement("tr");
+    	row.id="r"+(j+1);
+
+		var header = document.createElement("th");
+		header.scope="row";
+		header.id="row"+(j+1);
+		header.style="writing-mode: horizontal-tb";
+		row.appendChild(header);
+
+		for (var i=0; i<gameSize; i++)
+		{
+			var cell = document.createElement("td");
+      		cell.id="row"+(i+1)+"column"+(j+1);
+			var input = document.createElement("input");
+			input.id="r"+(j+1)+"c"+(i+1);
+			input.type="button";
+			input.style="background: white; width: 65px; height: 65px; font-size:40px";
+			input.value="";
+			input.onmousedown=setValue;
+
+			cell.appendChild(input);
+			row.appendChild(cell);
+		}
+
+    	tblBody.appendChild(row);
+	}
+
+	tbl.appendChild(tblBody);
+	body.appendChild(tbl);
+	//tbl.setAttribute("border", "2");
+}
+
+function sound(src)
+{
+	this.sound = document.createElement("audio");
+	this.sound.src = src;
+	this.sound.setAttribute("preload", "auto");
+	this.sound.setAttribute("controls", "none");
+	this.sound.style.display = "none";
+	document.body.appendChild(this.sound);
+
+	this.play = function () {
+		this.sound.play();
+	}
+
+	this.stop = function () {
+		this.sound.pause();
+	}
+}
 
 function fillBoard(boardToFill)
 {
 	for(var j=0; j<puzzleSize; j++)
 	{
 		boardToFill[j]=new Array(puzzleSize);
-	}
-}
-
-function clearHTMLBoard()
-{
-	for(var i=0; i<puzzleSize; i++)
-	{
-		for(var j=0; j<puzzleSize; j++)
-		{
-			var name="r"+(i+1)+"c"+(j+1);//Used for the grid ID names
-
-			document.getElementById(name).value=""
-			document.getElementById(name).style.background="white";
-		}
 	}
 }
 
@@ -69,7 +147,7 @@ function checkForWin()
 	{
 		for(var j=0; j<puzzleSize; j++)
 		{
-			if(gameBoard[i][j]!=playerBoard[i][j])//Needs to be rewritten to account for explosives
+			if(gameBoard[i][j]!=playerBoard[i][j])
 			{
 				win=0;
 			}
@@ -78,6 +156,7 @@ function checkForWin()
 
 	if(win==1 && winCheckFlag==1)
 	{
+		gameWinSound.play();
 		winStreak++;
 		//totalWins++;
 		document.getElementById("status").innerHTML="YOU WIN!\n Puzzles completed: "+winStreak;
@@ -108,15 +187,6 @@ function createRandomPuzzle(difficulty)
 		{
 			var rng=Math.floor(Math.random()*10)+1;//Increased by 1
 
-			/*if(rng%2==0)
-			{
-				gameBoard[i][j]="O";
-			}
-			else
-			{
-				gameBoard[i][j]="X";
-			}*/
-
 			if(rng<=difficulty)
 			{
 				gameBoard[i][j]="O";
@@ -129,11 +199,6 @@ function createRandomPuzzle(difficulty)
 		}
 	}
 
-	/*if(document.getElementById("puzzleDifficulty").value<=3 && puzzleSize==10 && (fillCount<42  || fillCount>47))
-	{
-		console.log("# of pieces: "+fillCount);
-		createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
-	}*/
 	var lowRange=0.0;
 	var highRange=0.0;
 
@@ -165,68 +230,6 @@ function createRandomPuzzle(difficulty)
 		createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
 	}
 
-
-	setBoardVisibility();
-}
-
-function setBoardVisibility()
-{
-	for(var i=0; i<10; i++)
-	{
-		for(var j=0; j<10; j++)
-		{
-			var name="r"+(i+1)+"c"+(j+1);//Used for the grid ID names
-			var rowcol="row"+(i+1)+"column"+(j+1);//Used for the grid ID names
-			var row="r"+(i+1);
-			var col="column"+(i+1);
-
-			//console.log(rowcol);
-
-			if(i<puzzleSize && j<puzzleSize)
-			{
-				document.getElementById(name).style.visibility="visible";
-				//document.getElementById(name).style.display="inline";
-
-				document.getElementById(rowcol).style.visibility="visible";
-				//document.getElementById(rowcol).style.display="inline";
-
-			}
-			else
-			{
-				document.getElementById(name).style.visibility="hidden";
-				//document.getElementById(name).style.display="none";
-
-				document.getElementById(rowcol).style.visibility="hidden";
-				//document.getElementById(rowcol).style.display="none";
-
-				document.getElementById(row).style.visibility="hidden";
-				document.getElementById(col).style.visibility="hidden";
-
-			}
-
-			if(i<puzzleSize)
-			{
-				document.getElementById(row).style.visibility="visible";
-				document.getElementById(col).style.visibility="visible";
-			}
-		}
-	}
-
-	clearHeaders();
-}
-
-function createPuzzleFromFile()
-{
-	document.getElementById('my_file').click();
-	var fileData=document.getElementById('my_file');
-
-	const reader = new FileReader()
-	console.log(fileData);
-
-	reader.onload=fileData.textContent;
-	var textData=reader.onload;
-
-	console.log(textData);
 }
 
 function fillHeaders()
@@ -294,11 +297,6 @@ function checkData(check)
 
 function clearHeaders()
 {
-	for(var o=0; o<puzzleSize; o++)
-	{
-		document.getElementById("row"+(o+1)).innerHTML="";
-		document.getElementById("column"+(o+1)).innerHTML="";
-	}
 }
 
 function updateRows()
@@ -327,10 +325,13 @@ function updateColumns()
 	}
 }
 
-function setValue(toBeUpdated, event)
+function setValue(toBeUpdated)
 {
+	var newToBeUpdated = toBeUpdated.path[0].id;
+	//console.log(document.getElementById(newToBeUpdated));
+
 	var cheatButton=false;
-	var pos=toBeUpdated.split("c");
+	var pos=newToBeUpdated.split("c");
 	pos[0]=pos[0].replace("r"," ");
 
 	pos[0]-=1;
@@ -338,72 +339,72 @@ function setValue(toBeUpdated, event)
 
 	if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent))//Used for mobile
 	{
-		if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
+		if(document.getElementById(newToBeUpdated).value=="" && gameInProgress==1)
 		{
-			document.getElementById(toBeUpdated).value="O";
-			document.getElementById(toBeUpdated).style.background="black";
+			document.getElementById(newToBeUpdated).value="O";
+			document.getElementById(newToBeUpdated).style.background="black";
 		}
-		else if(document.getElementById(toBeUpdated).value=="O" && gameInProgress==1)
+		else if(document.getElementById(newToBeUpdated).value=="O" && gameInProgress==1)
 		{
-			document.getElementById(toBeUpdated).value="X";
-			document.getElementById(toBeUpdated).style.background="white";
+			document.getElementById(newToBeUpdated).value="X";
+			document.getElementById(newToBeUpdated).style.background="white";
 		}
-		else if(document.getElementById(toBeUpdated).value=="X" && gameInProgress==1)
+		else if(document.getElementById(newToBeUpdated).value=="X" && gameInProgress==1)
 		{
-			document.getElementById(toBeUpdated).value="";
-			document.getElementById(toBeUpdated).style.background="white";
+			document.getElementById(newToBeUpdated).value="";
+			document.getElementById(newToBeUpdated).style.background="white";
 		}
 	}
 	else
 	{
-		if(event.button==0 && gameInProgress==1)
+		if(toBeUpdated.button==0 && gameInProgress==1)
 		{
-			if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
+			if(document.getElementById(newToBeUpdated).value=="" && gameInProgress==1)
 			{
-				document.getElementById(toBeUpdated).value="O";
-				document.getElementById(toBeUpdated).style.background="black";
+				document.getElementById(newToBeUpdated).value="O";
+				document.getElementById(newToBeUpdated).style.background="black";
 			}
 			else
 			{
-				document.getElementById(toBeUpdated).value="";
-				document.getElementById(toBeUpdated).style.background="white";
+				document.getElementById(newToBeUpdated).value="";
+				document.getElementById(newToBeUpdated).style.background="white";
 			}
 		}
-		else if(event.button==1 && gameInProgress==1 && cheatButton)
+		else if(toBeUpdated.button==1 && gameInProgress==1 && cheatButton)
 		{
 			if(hintAmt>0)
 			{
 				if(gameBoard[pos[0]][pos[1]]=="O" && gameInProgress==1)
 				{
-					document.getElementById(toBeUpdated).value="O";
-					document.getElementById(toBeUpdated).style.background="black";
+					document.getElementById(newToBeUpdated).value="O";
+					document.getElementById(newToBeUpdated).style.background="black";
 				}
 				else
 				{
-					document.getElementById(toBeUpdated).value="X";
-					document.getElementById(toBeUpdated).style.background="white";
+					document.getElementById(newToBeUpdated).value="X";
+					document.getElementById(newToBeUpdated).style.background="white";
 				}
 				hintAmt--;
 				hintBtn.value=hintAmt+" hints left!";
 				document.getElementById("status").innerHTML=hintAmt+" hints left!";
 			}
 		}
-		else if(event.button==2 && gameInProgress==1)
+		else if(toBeUpdated.button==2 && gameInProgress==1)
 		{
-			if(document.getElementById(toBeUpdated).value=="" && gameInProgress==1)
+			if(document.getElementById(newToBeUpdated).value=="" && gameInProgress==1)
 			{
-				document.getElementById(toBeUpdated).value="X";
-				document.getElementById(toBeUpdated).style.background="white";
+				document.getElementById(newToBeUpdated).value="X";
+				document.getElementById(newToBeUpdated).style.background="white";
 			}
 			else
 			{
-				document.getElementById(toBeUpdated).value="";
-				document.getElementById(toBeUpdated).style.background="white";
+				document.getElementById(newToBeUpdated).value="";
+				document.getElementById(newToBeUpdated).style.background="white";
 			}
 		}
 	}
 
-
+	piecePlace.play();
 	updateGameBoard();
 	checkForWin();
 }
@@ -436,22 +437,7 @@ function giveHints(difficulty)
 		default: hintAmt+=999;break;
 	}
 
-	switch(puzzleSize)
-	{
-		case 5: hintAmt+=1.25;break;
-		case 6: hintAmt+=2.25;break;
-		case 7: hintAmt+=2.5;break;
-		case 8: hintAmt+=2.75;break;
-		case 9: hintAmt+=3.0;break;
-		case 10: hintAmt+=3.5;break;
-		case '5': hintAmt+=1.25;break;
-		case '6': hintAmt+=2.25;break;
-		case '7': hintAmt+=2.5;break;
-		case '8': hintAmt+=2.75;break;
-		case '9': hintAmt+=3.0;break;
-		case '10': hintAmt+=3.5;break;
-		default: hintAmt+=999;break;
-	}
+	hintAmt+=(puzzleSize*0.5);
 
 	hintAmt=Math.floor(hintAmt);
 	hintBtn.value=hintAmt+" hints left!";
@@ -459,14 +445,21 @@ function giveHints(difficulty)
 
 startBtn.onclick = function startGame()
 {
+
 	puzzleSize=10;
+
+	//createGameBoard(puzzleSize);
+
 	winCheckFlag=1;
 
 	var difficulty=Math.floor(Math.random()*10)+1;
 
 	setPuzzleSize();
 
+	tableCreate(puzzleSize);
+
 	giveHints(difficulty);
+	gameStartSound.play();
 	fillBoard(gameBoard);
 
 	createRandomPuzzle(difficulty);
@@ -476,17 +469,20 @@ startBtn.onclick = function startGame()
 	//document.getElementById("status").innerHTML=hintAmt+" hints left!";
 	console.log(gameBoard);
 	fillBoard(playerBoard);
-	clearHTMLBoard();
 	gameInProgress=1;
 }
 
 startSetBtn.onclick = function startGame()
 {
 	puzzleSize=document.getElementById("puzzleSize").value;
+	tableCreate(puzzleSize);
+	//createGameBoard(puzzleSize);
+
 	winCheckFlag=1;
 
 	giveHints(document.getElementById("puzzleDifficulty").value);
 
+	gameStartSound.play();
 	fillBoard(gameBoard);
 
 	createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
@@ -495,24 +491,6 @@ startSetBtn.onclick = function startGame()
 	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
 	console.log(gameBoard);
 	fillBoard(playerBoard);
-	clearHTMLBoard();
-	gameInProgress=1;
-}
-
-loadBtn.onclick = function startGame()
-{
-
-	createPuzzleFromFile();
-	fillBoard(gameBoard);
-
-
-
-	fillHeaders();
-	document.getElementById("game").style.visibility="visible";
-	document.getElementById("status").innerHTML="Puzzle: "+puzzleName;
-	console.log(gameBoard);
-	fillBoard(playerBoard);
-	clearHTMLBoard();
 	gameInProgress=1;
 }
 
