@@ -254,7 +254,7 @@ function createRandomPuzzle(difficulty)
 	}
 
 
-	if(fillCount<(puzzleHeight*puzzleWidth*lowRange)  || fillCount>(puzzleHeight*puzzleWidth*highRange))
+	if((fillCount<(puzzleHeight*puzzleWidth*lowRange)  || fillCount>(puzzleHeight*puzzleWidth*highRange))&&(puzzleHeight>4)&&(puzzleWidth>4))
 	{
 		console.log("# of pieces: "+fillCount);
 		createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
