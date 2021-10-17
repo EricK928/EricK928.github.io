@@ -2,12 +2,13 @@ var winStreak=0;
 var winCheckFlag=1;
 
 var hintAmt=0;
-var puzzleSize=10;
-var gameBoard=[puzzleSize];
-var playerBoard=[puzzleSize];
+var puzzleHeight=10;
+var puzzleWidth=10;
+var gameBoard=[puzzleWidth];
+var playerBoard=[puzzleWidth];
 
-var rowLabels=[puzzleSize];
-var columnLabels=[puzzleSize];
+var rowLabels=[puzzleWidth];
+var columnLabels=[puzzleHeight];
 var helpBtn = document.getElementById("tut");
 var startBtn = document.getElementById("start");
 var startSetBtn = document.getElementById("startSet");
@@ -20,78 +21,6 @@ var gameStartSound = new sound("./resources/gameStart.wav");
 var gameWinSound = new sound("./resources/gameWin.wav");
 
 var puzzleName="";//NEEDS TO BE IMPLEMENTED
-
-function tableCreate(gameSize)
-{
-	var body = document.getElementsByTagName("body")[0];
-
-	var tbl = document.createElement("table");
-	tbl.id=("game");
-	tbl.style.width  = "100px";
-	tbl.align = 'center';
-
-	var creationCheck=document.getElementById("game");
-	console.log(creationCheck);
-
-	if(creationCheck!=null)
-	{
-		creationCheck.remove();
-	}
-
-	var tblBody = document.createElement("tbody");
-
-	//Starting work on header
-	var rowa = document.createElement("tr");
-	var de = document.createElement("td");
-
-	rowa.appendChild(de);
-
-
-	for(var k=0; k<gameSize; k++)
-	{
-		var header = document.createElement("th");
-		header.scope="col";
-		header.id="column"+(k+1);
-		header.style="word-wrap: break-word";
-    	rowa.appendChild(header);
-	}
-
-	tblBody.appendChild(rowa);
-
-	//Work on actual gameboard
-	for (var j=0; j<gameSize; j++)
-	{
-    	var row = document.createElement("tr");
-    	row.id="r"+(j+1);
-
-		var header = document.createElement("th");
-		header.scope="row";
-		header.id="row"+(j+1);
-		header.style="writing-mode: horizontal-tb";
-		row.appendChild(header);
-
-		for (var i=0; i<gameSize; i++)
-		{
-			var cell = document.createElement("td");
-      		cell.id="row"+(i+1)+"column"+(j+1);
-			var input = document.createElement("input");
-			input.id="r"+(j+1)+"c"+(i+1);
-			input.type="button";
-			input.style="background: white; width: 65px; height: 65px; font-size:40px";
-			input.value="";
-			input.onmousedown=setValue;
-
-			cell.appendChild(input);
-			row.appendChild(cell);
-		}
-
-    	tblBody.appendChild(row);
-	}
-
-	tbl.appendChild(tblBody);
-	body.appendChild(tbl);
-	//tbl.setAttribute("border", "2");
-}
 
 function sound(src)
 {
@@ -111,48 +40,148 @@ function sound(src)
 	}
 }
 
-function fillBoard(boardToFill)
-{
-	for(var j=0; j<puzzleSize; j++)
+	function tableCreate(gameHeight, gameWidth)
 	{
-		boardToFill[j]=new Array(puzzleSize);
+		//console.log("GameSize: "+gameSize);
+	  //body reference
+	  var body = document.getElementsByTagName("body")[0];
+
+	  // create elements <table> and a <tbody>
+	  var tbl = document.createElement("table");
+	  tbl.id=("game");
+	  tbl.style.width  = "100px";
+	  tbl.align = 'center';
+
+		var creationCheck=document.getElementById("game");
+		console.log(creationCheck);
+
+	  if(creationCheck!=null)
+	  {
+	  	creationCheck.remove();
+	  }
+
+	  var tblBody = document.createElement("tbody");
+
+	  var rowa = document.createElement("tr");
+	  var de = document.createElement("td");
+
+	  rowa.appendChild(de);
+
+	  for(var k=0; k<gameWidth; k++)
+	  {
+		var header = document.createElement("th");
+		header.scope="col";
+		header.id="column"+(k+1);
+	    rowa.appendChild(header);
+	  }
+
+	  tblBody.appendChild(rowa);
+
+	  // cells creation
+	  for (var j = 0; j < gameHeight; j++) {
+	    // table row creation
+	    var row = document.createElement("tr");
+	    row.id="r"+(j+1);
+
+	    var header = document.createElement("th");
+	    header.scope="row";
+	    header.id="row"+(j+1);
+	    row.appendChild(header);
+
+	    for (var i = 0; i < gameWidth; i++) {
+	      // create element <td> and text node
+	      //Make text node the contents of <td> element
+	      // put <td> at end of the table row
+	      var cell = document.createElement("td");
+	      cell.id="row"+(j+1)+"column"+(i+1);
+	      //var cellText = document.createTextNode("cell is row " + j + ", column " + i);
+
+	      var input = document.createElement("input");
+	      input.id="r"+(j+1)+"c"+(i+1);
+	      input.type="button";
+	      input.style="background: white; width: 65px; height: 65px; font-size:40px";
+	      input.value="";
+	      input.onmousedown=setValue;
+
+
+	      cell.appendChild(input);
+	      row.appendChild(cell);
+	    }
+
+	    //row added to end of table body
+
+
+	    tblBody.appendChild(row);
+	  }
+
+	  // append the <tbody> inside the <table>
+	  tbl.appendChild(tblBody);
+	  // put <table> in the <body>
+	  body.appendChild(tbl);
+	  // tbl border attribute to
+	  tbl.setAttribute("border", "2");
+
+	  console.log(tbl);
 	}
-}
 
-function updateGameBoard()
-{
-	for(var i=0; i<puzzleSize; i++)
+	function fillBoard(boardToFill)
 	{
-		for(var j=0; j<puzzleSize; j++)
+		for(var j=0; j<puzzleHeight; j++)
 		{
-			var name="r"+(i+1)+"c"+(j+1);//Used for the grid ID names
-
-			if(document.getElementById(name).value=="")
-			{
-				playerBoard[i][j]="X";
-			}
-			else
-			{
-				playerBoard[i][j]=document.getElementById(name).value//Gets values in game board
-			}
-
+			boardToFill[j]=new Array(puzzleWidth);
 		}
 	}
-}
+
+	function clearHTMLBoard()
+	{
+		for(var i=0; i<puzzleWidth; i++)
+		{
+			for(var j=0; j<puzzleHeight; j++)
+			{
+				var name="r"+(i+1)+"c"+(j+1);//Used for the grid ID names
+
+				document.getElementById(name).value=""
+				document.getElementById(name).style.background="white";
+			}
+		}
+	}
+
+	function updateGameBoard()
+	{
+		for(var i=0; i<puzzleHeight; i++)
+		{
+			for(var j=0; j<puzzleWidth; j++)
+			{
+				var name="r"+(i+1)+"c"+(j+1);//Used for the grid ID names
+
+				if(document.getElementById(name).value=="")
+				{
+					playerBoard[i][j]="X";
+				}
+				else
+				{
+					playerBoard[i][j]=document.getElementById(name).value//Gets values in game board
+				}
+
+			}
+		}
+
+	}
+
 
 function checkForWin()
 {
-	var win=1;
-	for(var i=0; i<puzzleSize; i++)
-	{
-		for(var j=0; j<puzzleSize; j++)
+		var win=1;
+		for(var i=0; i<puzzleHeight; i++)
 		{
-			if(gameBoard[i][j]!=playerBoard[i][j])
+			for(var j=0; j<puzzleWidth; j++)
 			{
-				win=0;
+				if(gameBoard[i][j]!=playerBoard[i][j])
+				{
+					win=0;
+				}
 			}
 		}
-	}
 
 	if(win==1 && winCheckFlag==1)
 	{
@@ -172,18 +201,19 @@ function setPuzzleSize()
 {
 	do
 	{
-		puzzleSize=Math.floor(Math.random()*6)+5;
+		puzzleWidth=Math.floor(Math.random()*6)+5;
+		puzzleHeight=Math.floor(Math.random()*6)+5;
 	}
-	while(puzzleSize>10);
+	while(puzzleWidth>10);
 }
 
 function createRandomPuzzle(difficulty)
 {
 	var fillCount=0;
 
-	for(var i=0; i<puzzleSize; i++)
+	for(var i=0; i<puzzleHeight; i++)
 	{
-		for(var j=0; j<puzzleSize; j++)
+		for(var j=0; j<puzzleWidth; j++)
 		{
 			var rng=Math.floor(Math.random()*10)+1;//Increased by 1
 
@@ -224,7 +254,7 @@ function createRandomPuzzle(difficulty)
 	}
 
 
-	if(fillCount<(puzzleSize*puzzleSize*lowRange)  || fillCount>(puzzleSize*puzzleSize*highRange))
+	if(fillCount<(puzzleHeight*puzzleWidth*lowRange)  || fillCount>(puzzleHeight*puzzleWidth*highRange))
 	{
 		console.log("# of pieces: "+fillCount);
 		createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
@@ -233,97 +263,105 @@ function createRandomPuzzle(difficulty)
 }
 
 function fillHeaders()
-{
-	var reverseBoard=[puzzleSize];
-	fillBoard(reverseBoard);
-
-	for(var i=0; i<puzzleSize; i++)
 	{
-		for(var j=0; j<puzzleSize; j++)
+		var reverseBoard=[puzzleWidth];
+
+		for(var j=0; j<puzzleWidth; j++)
 		{
-			reverseBoard[j][i]=gameBoard[i][j];
+			reverseBoard[j]=new Array(puzzleHeight);
 		}
-	}
 
-	for(var i=0; i<puzzleSize; i++)
-	{
-		rowLabels[i]=checkData(gameBoard[i]);
-		columnLabels[i]=checkData(reverseBoard[i]);
-	}
+		console.log(reverseBoard);
 
-	updateRows();
-	updateColumns();
-}
-
-function checkData(check)
-{
-	var currentString="";
-	var currentCount=0;
-	var zeroCheck=1;//Used in the event a row has no spots that should be filled
-
-	for(var i=0; i<check.length; i++)
-	{
-		if(i==check.length-1 && check[i]=="O")
+		for(var i=0; i<puzzleHeight; i++)
 		{
-			zeroCheck=0;
-			currentCount++;
-			currentString+=currentCount;
-			currentCount=0;
-		}
-		else if(check[i]=="O")
-		{
-			zeroCheck=0;
-			currentCount++;
-		}
-		else
-		{
-			if(currentCount!=0)
+			for(var j=0; j<puzzleWidth; j++)
 			{
-				zeroCheck=0;
-				currentString+=currentCount;
-				currentString+=" ";
-				currentCount=0;
+				reverseBoard[j][i]=gameBoard[i][j];
 			}
 		}
+
+		for(var i=0; i<puzzleHeight; i++)
+		{
+			rowLabels[i]=checkData(gameBoard[i]);
+		}
+
+		for(var i=0; i<puzzleWidth; i++)
+		{
+			columnLabels[i]=checkData(reverseBoard[i]);
+		}
+
+		console.log("Row lables: "+rowLabels);
+		updateRows();
+		updateColumns();
 	}
 
-	if(zeroCheck==1)
+	function checkData(check)
 	{
-		currentString="0";
+		var currentString="";
+		var currentCount=0;
+		var zeroCheck=1;//Used in the event a row has no spots that should be filled
+
+		for(var i=0; i<check.length; i++)
+		{
+			if(i==check.length-1 && check[i]=="O")
+			{
+				zeroCheck=0;
+				currentCount++;
+				currentString+=currentCount;
+				currentCount=0;
+			}
+			else if(check[i]=="O")
+			{
+				zeroCheck=0;
+				currentCount++;
+			}
+			else
+			{
+				if(currentCount!=0)
+				{
+					zeroCheck=0;
+					currentString+=currentCount;
+					currentString+=" ";
+					currentCount=0;
+				}
+			}
+		}
+
+		if(zeroCheck==1)
+		{
+			currentString="0";
+		}
+
+		return currentString;
 	}
 
-	return currentString;
-}
-
-function clearHeaders()
-{
-}
-
-function updateRows()
-{
-	var globalRow="row"
-	var startingRow=0;
-
-	for(var o=0; o<puzzleSize; o++)
+	function updateRows()
 	{
-		startingRow++;
-		var comb=globalRow+startingRow;
-		document.getElementById(comb).innerHTML=rowLabels[o];
+		var globalRow="row"
+		var startingRow=0;
+
+		for(var o=0; o<puzzleHeight; o++)
+		{
+			startingRow++;
+			var comb=globalRow+startingRow;
+			document.getElementById(comb).innerHTML=rowLabels[o];
+		}
 	}
-}
 
-function updateColumns()
-{
-	var globalRow="column"
-	var startingColumn=0;
-
-	for(var o=0; o<puzzleSize; o++)
+	function updateColumns()
 	{
-		startingColumn++;
-		var comb=globalRow+startingColumn;
-		document.getElementById(comb).innerHTML=columnLabels[o];
+		var globalRow="column"
+		var startingColumn=0;
+
+		for(var o=0; o<puzzleWidth; o++)
+		{
+			startingColumn++;
+			var comb=globalRow+startingColumn;
+			document.getElementById(comb).innerHTML=columnLabels[o];
+		}
 	}
-}
+
 
 function setValue(toBeUpdated)
 {
@@ -437,7 +475,7 @@ function giveHints(difficulty)
 		default: hintAmt+=999;break;
 	}
 
-	hintAmt+=(puzzleSize*0.5);
+	hintAmt+=(puzzleWidth*0.5);
 
 	hintAmt=Math.floor(hintAmt);
 	hintBtn.value=hintAmt+" hints left!";
@@ -446,7 +484,8 @@ function giveHints(difficulty)
 startBtn.onclick = function startGame()
 {
 
-	puzzleSize=10;
+	puzzleHeight=10;
+	puzzleWidth=10;
 
 	//createGameBoard(puzzleSize);
 
@@ -456,7 +495,7 @@ startBtn.onclick = function startGame()
 
 	setPuzzleSize();
 
-	tableCreate(puzzleSize);
+	tableCreate(puzzleHeight, puzzleWidth);
 
 	giveHints(difficulty);
 	gameStartSound.play();
@@ -465,7 +504,7 @@ startBtn.onclick = function startGame()
 	createRandomPuzzle(difficulty);
 	fillHeaders();
 	document.getElementById("game").style.visibility="visible";
-	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
+	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleHeight+"x"+puzzleWidth;
 	//document.getElementById("status").innerHTML=hintAmt+" hints left!";
 	console.log(gameBoard);
 	fillBoard(playerBoard);
@@ -474,8 +513,9 @@ startBtn.onclick = function startGame()
 
 startSetBtn.onclick = function startGame()
 {
-	puzzleSize=document.getElementById("puzzleSize").value;
-	tableCreate(puzzleSize);
+	puzzleHeight=document.getElementById("puzzleHeight").value;
+	puzzleWidth=document.getElementById("puzzleWidth").value;
+	tableCreate(puzzleHeight, puzzleWidth);
 	//createGameBoard(puzzleSize);
 
 	winCheckFlag=1;
@@ -488,7 +528,7 @@ startSetBtn.onclick = function startGame()
 	createRandomPuzzle(document.getElementById("puzzleDifficulty").value);
 	fillHeaders();
 	document.getElementById("game").style.visibility="visible";
-	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleSize+"x"+puzzleSize;
+	document.getElementById("status").innerHTML="Puzzle: Random "+puzzleHeight+"x"+puzzleWidth;
 	console.log(gameBoard);
 	fillBoard(playerBoard);
 	gameInProgress=1;
@@ -504,8 +544,8 @@ hintBtn.onclick = function startGame()
 
 		do
 		{
-			rowPos=Math.floor(Math.random()*puzzleSize);
-			colPos=Math.floor(Math.random()*puzzleSize);
+			rowPos=Math.floor(Math.random()*puzzleHeight);
+			colPos=Math.floor(Math.random()*puzzleWidth);
 			nameUpdate="r"+(rowPos+1)+"c"+(colPos+1);
 		}
 		while(document.getElementById(nameUpdate).value==gameBoard[rowPos][colPos]);
