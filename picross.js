@@ -365,7 +365,8 @@ function fillHeaders()
 
 function setValue(toBeUpdated)
 {
-	var newToBeUpdated = toBeUpdated.path[0].id;
+	//console.log("Var: " + toBeUpdated.target.id);
+	var newToBeUpdated = toBeUpdated.target.id;//Only line that needed changing for the fix on 5/16
 	//console.log(document.getElementById(newToBeUpdated));
 
 	var cheatButton=false;
